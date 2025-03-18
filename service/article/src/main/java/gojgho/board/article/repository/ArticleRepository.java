@@ -16,7 +16,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
           + "from ("
           + "  select article_id from article"
           + "  where board_id = :boardId"
-          + "  order by article_id desc "
+          + "  order by article_id desc"
           + "  limit :limit offset :offset"
           + ") t left join article on t.article_id = article.article_id",
       nativeQuery = true

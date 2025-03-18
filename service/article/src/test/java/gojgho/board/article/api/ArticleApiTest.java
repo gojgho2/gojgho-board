@@ -1,6 +1,7 @@
 package gojgho.board.article.api;
 
 
+import gojgho.board.article.service.response.ArticlePageResponse;
 import gojgho.board.article.service.response.ArticleResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,6 +60,24 @@ public class ArticleApiTest {
     restClient.delete()
         .uri("/v1/articles/{articleId}", 133070344737140736L)
         .retrieve();
+  }
+
+  @Test
+  void readAllTest() {
+    ArticlePageResponse response = restClient.get()
+            .uri("/v1/articles?boardId=1&pageSize=30&page=50000")
+            .retrieve()
+            .body(ArticlePageResponse.class);
+
+      assert response != null;
+      System.out.println("response.getArticleCount() = " + response.getArticleCount());
+
+
+    for (ArticleResponse article : response.getArticles()) {
+      System.out.println("article = " + article);
+
+    }
+
   }
 
   @Getter

@@ -4,6 +4,7 @@ import gojgho.board.article.entity.Article;
 import gojgho.board.article.repository.ArticleRepository;
 import gojgho.board.article.service.request.ArticleCreateRequest;
 import gojgho.board.article.service.request.ArticleUpdateRequest;
+import gojgho.board.article.service.response.ArticlePageResponse;
 import gojgho.board.article.service.response.ArticleResponse;
 import java.util.Optional;
 import kuke.board.common.snowflake.Snowflake;
@@ -43,4 +44,16 @@ public class ArticleService {
     articleRepository.deleteById(articleId);
   }
 
+
+  public ArticlePageResponse readAll(Long boardId, Long page, Long pageSize) {
+    return ArticlePageResponse.of(
+            articleRepository.findAll(boardId, (page - 1) * pageSize, pageSize).stream()
+                    .map(ArticleResponse::from)
+                    .toList(),
+            articleRepository.count(
+                    boardId,
+                    PageLimitCalculator.calculatePageLimit(page, pageSize, 10L)
+            )
+    );
+  }
 }
